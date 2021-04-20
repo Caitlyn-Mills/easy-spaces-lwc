@@ -1,31 +1,35 @@
-# Validate changes introduced through PR
+# Unique name for this workflow
+name: sfpowerscripts validate
 
-trigger: none
-
-pr:
-    autoCancel: false
-    drafts: false
-    branches:
-        include:
+# Definition when the workflow should run
+on:
+    workflow_dispatch:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
             - develop
-pool:
-    vmImage: 'ubuntu-latest'
 
-container: dxatscale/sfpowerscripts:latest
+# Jobs to be executed
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-variables:
-  - group: DEVHUB
+            # Copy Dev Hub server key to file
+            - name: 'Copy Dev Hub server key to file'
+              shell: bash
+              run: |
+                  echo "${SALESFORCE_JWT_SECRET_KEY}" > ./JWT_KEYFILE
+              env:
+                  SALESFORCE_JWT_SECRET_KEY: ${{ secrets.DEVHUB_SERVER_KEY }}
 
-steps:
+            # Validate source and trigger test
+            - name: 'Push source to scratch org'
+              run: 'sfdx sfpowerscripts:orchestrator:validate -f ./JWT_KEYFILE -i ${{ secrets.DEVHUB_CLIENT_ID }} -p CI1 -u  ${{ secrets.DEVHUB_USERNAME }} -x'
 
-    - checkout: self
-      persistCredentials: true
-
-    - task: DownloadSecureFile@1
-      name: devhubKey
-      inputs:
-          secureFile: 'DEVHUB_SERVER_KEY'
-
-    - script: |
-          sfdx sfpowerscripts:orchestrator:validate -f $(devhubKey.secureFilePath) -i $(DEVHUB_CLIENT_ID) -p CI2 -u $(DEVHUB_USERNAME)  -x
-      displayName: 'Validate Changes'
