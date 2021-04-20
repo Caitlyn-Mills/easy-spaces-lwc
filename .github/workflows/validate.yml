@@ -31,5 +31,5 @@ jobs:
 
             # Validate source and trigger test
             - name: 'Push source to scratch org'
-              run: 'sfdx sfpowerscripts:orchestrator:validate -f ./JWT_KEYFILE -i ${{ secrets.DEVHUB_CLIENT_ID }} -p CI1 -u  ${{ secrets.DEVHUB_USERNAME }} -x'
+              run: 'sfdx sfpowerscripts:orchestrator:validate -f ./JWT_KEYFILE -i ${{ secrets.DEVHUB_CLIENT_ID }} -p preparepool -u  ${{ secrets.DEVHUB_USERNAME }} -x'
 
