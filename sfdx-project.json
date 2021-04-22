@@ -55,9 +55,9 @@
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "50.0",
     "packageAliases": {
-        "ESObjects": "0Ho2s0000000006CAA",
-        "ESBaseCodeLWC": "0Ho2s000000000LCAQ",
-        "ESBaseStylesLWC": "0Ho2s000000000GCAQ",
-        "ESSpaceMgmtLWC": "0Ho2s000000000QCAQ"
+        "ESObjects": "0Ho4W000000CaeJSAS",
+        "ESBaseCodeLWC": "0Ho4W000000CaeTSAS",
+        "ESBaseStylesLWC": "0Ho4W000000CaeOSAS",
+        "ESSpaceMgmtLWC": "0Ho4W000000CaeYSAS"
     }
 }
