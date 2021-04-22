@@ -6,7 +6,9 @@
             "versionName": "Base Objects - Winter '21",
             "versionNumber": "50.0.5.NEXT",
             "default": false,
-            "assignPermSetsPostDeployment":[ "EasySpacesObjects" ]
+            "assignPermSetsPostDeployment": [
+                "EasySpacesObjects"
+            ]
         },
         {
             "path": "./es-base-styles",
@@ -34,7 +36,9 @@
             "versionName": "Space Management App - Winter '21",
             "versionNumber": "50.0.4.NEXT",
             "default": true,
-            "assignPermSetsPostDeployment":[ "SpaceManagementApp" ],
+            "assignPermSetsPostDeployment": [
+                "SpaceManagementApp"
+            ],
             "dependencies": [
                 {
                     "package": "ESObjects",
@@ -55,9 +59,9 @@
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "50.0",
     "packageAliases": {
-        "ESObjects": "0Ho2s0000000006CAA",
-        "ESBaseCodeLWC": "0Ho2s000000000LCAQ",
-        "ESBaseStylesLWC": "0Ho2s000000000GCAQ",
-        "ESSpaceMgmtLWC": "0Ho2s000000000QCAQ"
+        "ESObjects": "0Ho2w0000008OsUCAU",
+        "ESBaseCodeLWC": "0Ho2w0000008OseCAE",
+        "ESBaseStylesLWC": "0Ho2w0000008OsZCAU",
+        "ESSpaceMgmtLWC": "0Ho2w0000008OsjCAE"
     }
 }
