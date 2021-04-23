@@ -90,8 +90,9 @@ jobs:
                   name: promoted-artifacts
                   path: promoted-artifacts
 
-    publish:
-        name: Publish artifacts to GitHub Packages
+    # Simulating a deploy to System Test Environment using a scratch org
+    deploy:
+        name: Deploy and Validate the packages
         runs-on: ubuntu-latest
         container: dxatscale/sfpowerscripts
         needs: promote
@@ -102,20 +103,30 @@ jobs:
               with:
                   fetch-depth: 0
 
+    #Github Actions are event based and are triggered independently,  There is no currently an option to control concurrency settings
+    #on pipelines and in this model, build should be run sequentially
+            - name: Wait till previous pipeline has finished this stage
+              uses: softprops/turnstyle@v0.1.5
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                abort-after-seconds: 1800
+
+              # Download Artifacts
             - name: Download Artifacts
               uses: actions/download-artifact@v2
               with:
                   name: promoted-artifacts
                   path: promoted-artifacts
 
-            - name: Set NPM registry
+            # Authenticate dev hub
+            - name: 'Authenticate Dev Hub'
               run: |
-                  npm set registry https://npm.pkg.github.com
-            - name: Authenticate to NPM registry
-              run: |
-                  echo "//npm.pkg.github.com/:_authToken=${AUTH_TOKEN}" >> ~/.npmrc
+                  echo "${SALESFORCE_JWT_SECRET_KEY}" > ./JWT_KEYFILE
+                  sfdx auth:jwt:grant -u ${{ secrets.DEVHUB_USERNAME }} -i ${{ secrets.DEVHUB_CLIENT_ID }} -f ./JWT_KEYFILE -a devhub -r https://login.salesforce.com
               env:
-                  AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SALESFORCE_JWT_SECRET_KEY: ${{ secrets.DEVHUB_SERVER_KEY }}
 
-            - name: Publish
-              run: |
+            # Install all new packages into scratch org
+            - name: 'Install new package versions into scratch org'
+              run: 'sfdx sfpowerscripts:orchestrator:deploy -u ${{ secrets.DEVHUB_USERNAME }}'
