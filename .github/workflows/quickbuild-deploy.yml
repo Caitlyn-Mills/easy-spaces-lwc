@@ -47,7 +47,6 @@ jobs:
         name: Deploy and Validate the packages
         runs-on: ubuntu-latest
         container: dxatscale/sfpowerscripts
-        needs: quickbuild
         steps:
             # Checkout the code
             - name: 'Checkout source code'
