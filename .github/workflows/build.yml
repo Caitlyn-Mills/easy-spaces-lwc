@@ -94,6 +94,7 @@ jobs:
     deploy:
         name: Deploy and Validate the packages
         runs-on: ubuntu-latest
+        needs: promote 
         container: dxatscale/sfpowerscripts
         steps:
             # Checkout the code
